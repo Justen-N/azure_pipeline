@@ -21,19 +21,19 @@ stages:
   pool: Local-Windows
   jobs:
   - job: 'Copyfiles'
-  steps:
-  - task: CopyFiles@2
-    displayName: 'CopyFilesfromGitHubtoPipelinestagingfolder'
-    inputs:
-      SourceFolder: '$(system.defaultworkingdirectory)'
-      Contents: '**\$(dacpac-file-name)'
-      TargetFolder: '$(build.artifactstagingdirectory)'
+    steps:
+    - task: CopyFiles@2
+      displayName: 'CopyFilesfromGitHubtoPipelinestagingfolder'
+      inputs:
+        SourceFolder: '$(system.defaultworkingdirectory)'
+        Contents: '**\$(dacpac-file-name)'
+        TargetFolder: '$(build.artifactstagingdirectory)'
+        condition: succeededOrFailed()
+    - task: PublishBuildArtifacts@1
+      displayName: 'PublishArtifact:drop'
+      inputs:
+        PathtoPublish: '$(build.artifactstagingdirectory)'
       condition: succeededOrFailed()
-  - task: PublishBuildArtifacts@1
-    displayName: 'PublishArtifact:drop'
-    inputs:
-      PathtoPublish: '$(build.artifactstagingdirectory)'
-    condition: succeededOrFailed()
 
 - stage: CD
   displayName: 'CDstage-Deploydacpacfiles'
@@ -44,28 +44,28 @@ stages:
       name: Local-Windows-SQL
       resourceType: VirtualMachine
       tags: winsql
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-            - download: none
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: none
 
-            - task: DownloadBuildArtifacts@0
-              displayName: 'DownloadArtifactFile'
-              inputs:
-              buildType: current
-              downloadType: single
-              downloadPath: $(System.DefaultWorkingDirectory)
-              artifactName: 'drop'
-
-            -task: SqlDacpacDeploymentOnMachineGroup@0
-            displayName: 'Deployusingdacpacfile'
+          - task: DownloadBuildArtifacts@0
+            displayName: 'DownloadArtifactFile'
             inputs:
-              tasktype: 'dacpac'
-              DacpacFile: '$(System.DefaultWorkingDirectory)/drop/$(BowlingLeagueExample.dacpac)'
-              TargetMethod: 'server'
-              ServerName: 'localhost'
-              DatabaseName: '$(BowlingLeagueExample)'
-              AuthScheme: sqlServerAuthentication
-              SqlUsername: '$(azure)'
-              SqlPassword: '$(Sq157azure93!)'
+            buildType: current
+            downloadType: single
+            downloadPath: $(System.DefaultWorkingDirectory)
+            artifactName: 'drop'
+
+          -task: SqlDacpacDeploymentOnMachineGroup@0
+          displayName: 'Deployusingdacpacfile'
+          inputs:
+            tasktype: 'dacpac'
+            DacpacFile: '$(System.DefaultWorkingDirectory)/drop/$(BowlingLeagueExample.dacpac)'
+            TargetMethod: 'server'
+            ServerName: 'localhost'
+            DatabaseName: '$(BowlingLeagueExample)'
+            AuthScheme: sqlServerAuthentication
+            SqlUsername: '$(azure)'
+            SqlPassword: '$(Sq157azure93!)'
