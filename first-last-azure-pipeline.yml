@@ -56,14 +56,14 @@ stages:
               downloadPath: $(System.DefaultWorkingDirectory)
               artifactName: 'drop'
 
-          -task: SqlDacpacDeploymentOnMachineGroup@0
-          displayName: 'Deployusingdacpacfile'
-          inputs:
-            tasktype: 'dacpac'
-            DacpacFile: '$(System.DefaultWorkingDirectory)/drop/$(BowlingLeagueExample.dacpac)'
-            TargetMethod: 'server'
-            ServerName: 'localhost'
-            DatabaseName: '$(BowlingLeagueExample)'
-            AuthScheme: sqlServerAuthentication
-            SqlUsername: '$(azure)'
-            SqlPassword: '$(Sq157azure93!)'
+          - task: SqlDacpacDeploymentOnMachineGroup@0
+            displayName: 'Deployusingdacpacfile'
+            inputs:
+              tasktype: 'dacpac'
+              DacpacFile: '$(System.DefaultWorkingDirectory)/drop/$(BowlingLeagueExample.dacpac)'
+              TargetMethod: 'server'
+              ServerName: 'localhost'
+              DatabaseName: '$(BowlingLeagueExample)'
+              AuthScheme: sqlServerAuthentication
+              SqlUsername: '$(azure)'
+              SqlPassword: '$(Sq157azure93!)'
