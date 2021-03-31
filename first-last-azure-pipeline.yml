@@ -6,8 +6,6 @@
 
 ################################################### 
 
- 
-
 trigger:
 - main
 
@@ -53,10 +51,10 @@ stages:
           - task: DownloadBuildArtifacts@0
             displayName: 'DownloadArtifactFile'
             inputs:
-            buildType: current
-            downloadType: single
-            downloadPath: $(System.DefaultWorkingDirectory)
-            artifactName: 'drop'
+              buildType: current
+              downloadType: single
+              downloadPath: $(System.DefaultWorkingDirectory)
+              artifactName: 'drop'
 
           -task: SqlDacpacDeploymentOnMachineGroup@0
           displayName: 'Deployusingdacpacfile'
